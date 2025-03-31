@@ -25,13 +25,14 @@ seeker/
 ├── package.json
 └── README.md
 
+
 ## Tecnologias utilizadas
 
--React: Para la construccion de la interfaz del usuario.
--React Context API: Para el manejo del estado global.
--react-tostify: Para mostrar notificaciones de exito o error al eliminar o agregar personajes favoritos.
--Fetch API: Para obtener los datos de los personajes de la API
--localStorage: Para persistir los personajes favoritos entre sesiones.
+- React: Para la construccion de la interfaz del usuario.
+- React Context API: Para el manejo del estado global.
+- react-tostify: Para mostrar notificaciones de exito o error al eliminar o agregar personajes favoritos.
+- Fetch API: Para obtener los datos de los personajes de la API
+- localStorage: Para persistir los personajes favoritos entre sesiones.
 
 ### Autor
 AGUSTINASC

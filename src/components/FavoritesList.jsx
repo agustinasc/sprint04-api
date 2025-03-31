@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const FavoritesList = () => {
 
-    const { favorites, removeFromFavorites, isVisible, setIsVisible } = useCharacters();
+    const { favorites, removeFromFavorites, isVisible, setIsVisible, clearFavorites } = useCharacters();
 
     if(!isVisible) return null
        
@@ -13,7 +13,7 @@ const FavoritesList = () => {
         <AnimatePresence>
         {isVisible && (
           <motion.aside
-          className="fixed right-0 top-0 h-full w-64 bg-orange-900 text-white shadow-lg p-4 overflow-y-auto"
+          className="fixed right-0 top-0 h-full w-64 bg-blue-900 text-white shadow-lg p-4 overflow-y-auto"
           initial={{ opacity: 0, x: 300 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 300 }}
@@ -57,6 +57,12 @@ const FavoritesList = () => {
               ))}
             </div>
           )}
+          <button
+                className="w-full bg-red-700 text-white py-2 rounded mt-4 hover:bg-red-800"
+                onClick={() => clearFavorites()}
+          >
+                Vaciar Favoritos
+              </button>
         </motion.aside>
       )}
     </AnimatePresence>

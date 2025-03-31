@@ -18,15 +18,26 @@ export const CharacterProvider = ({ children }) => {
     const [ nameFilter, setNameFilter ] = useState("")
 
     useEffect(() => {
-      const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      setFavorites(savedFavorites)
-    }, [])
+        const savedFavorites = localStorage.getItem("favorites");
+        
+        if (savedFavorites) {
+            try {
+                setFavorites(JSON.parse(savedFavorites));
+            } catch (error) {
+                console.error("Error parsing favorites from localStorage:", error);
+                setFavorites([]); // Si hay un error, inicia con un array vacío
+            }}
+            console.log(savedFavorites)
+    }, []);
+
+    
 
     useEffect(() => {
         if (favorites.length > 0) {
-            localStorage.setItem("favorites", JSON.stringify(favorites));
-          }
-      }, [favorites])
+            console.log("Guardando en localStorage:", favorites);
+            localStorage.setItem("favorites", JSON.stringify(favorites))
+        }
+    }, [favorites]);
     
 
     useEffect(() => {
@@ -51,18 +62,44 @@ export const CharacterProvider = ({ children }) => {
             }         
         }
         fetchCharacters(quantity)
-    }, [quantity])
+    }, [quantity]) 
 
-    const removeFromFavorites = (id) => {
-            setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.id !== id));
-        } 
-
-    
 
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
       };
     
+      const addToFavorites = (character) => {
+        setFavorites((prevFavorites) => {
+            const updatedFavorites = [...prevFavorites, character];
+            console.log("Favoritos actualizados: ", updatedFavorites);
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+            return updatedFavorites;
+        })
+      }
+
+         /* elimina el personaje de la lista de favoritos */
+      const removeFromFavorites = (id) => {
+        setFavorites((prevFavorites) => {
+            const updatedFavorites = prevFavorites.filter((fav) => fav.id !== id);
+            console.log("Favoritos actualizados: ", updatedFavorites);
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+            return updatedFavorites;
+        });
+    };
+
+    const clearFavorites = () => {
+      setFavorites([]); // Vacía el carrito
+      localStorage.setItem("favorites", JSON.stringify([]))
+
+      toast.info("🗑️ Lista de favoritos vaciada", { position: "top-center", autoClose: 2000, theme: "dark" });
+
+  };
+
+
+
     return(
         <CharacterContext.Provider
             value={{ 
@@ -79,7 +116,10 @@ export const CharacterProvider = ({ children }) => {
                 quantity, 
                 setQuantity,
                 nameFilter, 
-                setNameFilter
+                setNameFilter,
+                addToFavorites,
+               
+                clearFavorites
             }}
         >
             { children }

@@ -3,29 +3,25 @@ import { useCharacters } from '../context/CharacterContext'
 import { toast } from "react-toastify";
 
 
+
 const CharacterCard = ( { character }) => {
-    const { favorites, setFavorites } = useCharacters()
+    const { favorites, addToFavorites, removeFromFavorites } = useCharacters()
 
     const isFavorite = favorites.some((fav) => fav.id === character.id) //para chequear si ya esta en el Arr de favoritos
 
-      const toggleFavorite = () => {
+       const toggleFavorite = () => {
 
           if (isFavorite) {
-              const updatedFavorites = setFavorites(favorites.filter((fav) => fav.id !== character.id));//para eliminar
-              setFavorites(updatedFavorites)
-              
-              localStorage.setItem("favorites", JSON.stringify(updatedFavorites))
-
+              removeFromFavorites(character.id)
+        
               toast.error("❌ Personaje eliminado",{
                 position: "top-center", 
                 autoClose: 3000,  
                 hideProgressBar: true,
                 theme: "dark",  
-              })
+              }) 
             } else {
-              const updatedFavorites = setFavorites([...favorites, character]);
-
-              localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+              addToFavorites(character)
 
               toast.success("⭐ Personaje agregado a favoritos!", {
                 position: "top-center",
@@ -35,10 +31,10 @@ const CharacterCard = ( { character }) => {
                 pauseOnHover: true,  // Pausa la animación al pasar el mouse
                 draggable: true,  // Permite arrastrar la notificación
                 theme: "dark",
-              });
+              }); 
             }
-        }
-    
+        } 
+         
 
   return (
     <div className="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden m-3">
@@ -48,7 +44,7 @@ const CharacterCard = ( { character }) => {
             <p className="text-gray-600">{character.species} - {character.status}</p>
             <p className="text-gray-500">Ubicacion : {character.location.name}</p>
             <button 
-                className='bg-emerald-800 text-white p-2 m-1'
+                className='bg-emerald-800 hover:bg-emerald-400 text-white p-2 m-1'
                 onClick={toggleFavorite}
             >
                 {isFavorite ? "Eliminar de Favoritos" : "Agregar a Favoritos"}
