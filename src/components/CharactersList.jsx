@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useCharacters } from '../context/CharacterContext'
 import CharacterCard from './CharacterCard'
 import Loader from './Loader'
@@ -9,7 +9,11 @@ const CharactersList = () => {
 
     if (loading) return <Loader />
 
-    const filteredCharacters = nameFilter ? characters.filter(character => character.name.toLowerCase().includes(nameFilter.toLowerCase())) : characters
+    const filteredCharacters = useMemo(() => {
+        return nameFilter ? characters.filter(character => 
+            character.name.toLowerCase().includes(nameFilter.toLowerCase())
+            ) : characters 
+        }, [characters, nameFilter])
 
   return (
     <div className="flex flex-col justify-center bg-lime-800 p-2">
@@ -17,7 +21,7 @@ const CharactersList = () => {
             <h2 className='text-white font-bold text-5xl'>Lista de Personajes</h2>
         </div>
         <div className='flex flex-wrap justify-center gap-4'>
-            {characters.length > 0 ? (
+            {filteredCharacters.length > 0 ? (
                 filteredCharacters.map((character) => (
                     <div 
                         key={character.id} 
@@ -27,7 +31,7 @@ const CharactersList = () => {
                     </div>
                 ))
             ) : (
-                <p>
+                <p className="text-white text-xl font-semibold">
                     No se encontraron personajes
                 </p>
             )

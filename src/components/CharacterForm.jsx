@@ -1,24 +1,34 @@
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 import { useCharacters } from '../context/CharacterContext'
+
+
 
 const CharacterForm = () => {
    
-    const { setQuantity, setNameFilter } = useCharacters()
-    const [ inputValue, setInputValue ] = useState("")
-    const [ inputName, setInputName ] = useState("")
+    const { setQuantity, setNameFilter} = useCharacters()
+   /*  const [ inputValue, setInputValue ] = useState("")
+    const [ inputName, setInputName ] = useState("") */
+  
+    const inputRef = useRef(null);
+    const nameRef = useRef(null);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const parsedQuantity = parseInt(inputValue, 10)
+        const parsedQuantity = parseInt(inputRef.current.value, 10)
         if(parsedQuantity > 0 ){
             setQuantity(parsedQuantity)
+            inputRef.current.value = ""
         }
     }
 
     const handleSubmitName = (e) => {
         e.preventDefault()
-        setNameFilter(inputName)
+        setNameFilter(nameRef.current.value) //actualizar los estados solo cuando se haga submit.
+        nameRef.current.value = ""
     }
+
+   
  
   return (
     <div className='flex max-w mx-auto p-6 bg-indigo-600 shadow-md rounded-lg'>
@@ -28,11 +38,12 @@ const CharacterForm = () => {
         >
             <input 
                 type="number" 
-                value={inputValue} 
+                /* value={inputValue}  */
+                ref={inputRef}
                 min={1}
                 placeholder='Ingregar cantidad de personajes'
                 className='border p-3 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
-                onChange={(e) => setInputValue(e.target.value)}
+                /* onChange={(e) => setInputValue(e.target.value)} */
                     
             />
             <button 
@@ -50,10 +61,11 @@ const CharacterForm = () => {
         >
             <input 
                 type="text" 
-                value={inputName}
+                /* value={inputName} */
+                ref={nameRef}
                 placeholder='Ingresar nombre de un personaje'
                 className='border p-3 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
-                onChange={(e) => setInputName(e.target.value)}
+               /*  onChange={(e) => setInputName(e.target.value)} */
             />
             <button 
                 className='flex items-center gap-2 bg-blue-800 text-white px-5 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105 active:scale-95'
@@ -62,6 +74,8 @@ const CharacterForm = () => {
                 Buscar por Nombre
             </button>
         </form>
+
+       
     </div> 
   )
 }
