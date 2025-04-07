@@ -11,10 +11,10 @@ export const useCharacters = () => {
 export const CharacterProvider = ({ children }) => {
     
     const [ characters, setCharacters ] = useState([])
-    const [ favorites, setFavorites ] = useState([])
     const [ loading, setLoading ] = useState(false)
+    const [ favorites, setFavorites ] = useState([])
     const [ isVisible, setIsVisible ] = useState(false)
-    const [ quantity, setQuantity ] = useState(6)
+    const [ quantity, setQuantity ] = useState(20)
     const [ nameFilter, setNameFilter ] = useState("")
 
     useEffect(() => {
@@ -45,10 +45,11 @@ export const CharacterProvider = ({ children }) => {
             if (!quantity) return // si quantity es el mismo valor, evita FETCH innecesario
             setLoading(true)
             try {
-                const response = await fetch(`https://rickandmortyapi.com/api/character/`);
+                const response = await fetch(`https://rickandmortyapi.com/api/character?name=${nameFilter}`);
                 const data = await response.json();
                 setCharacters(data.results.slice(0, quantity) || [])
                 console.log(data.results);               
+                
             } catch (error) {
                 console.error("Error fetching characters:", error);
                 toast.error("❌ ERROR",{
@@ -62,7 +63,7 @@ export const CharacterProvider = ({ children }) => {
             }         
         }
         fetchCharacters(quantity)
-    }, [quantity]) 
+    }, [quantity, nameFilter]) 
 
 
     const toggleVisibility = () => {

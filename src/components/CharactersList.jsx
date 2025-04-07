@@ -7,14 +7,15 @@ const CharactersList = () => {
 
     const { characters, loading, nameFilter } = useCharacters()
 
-    if (loading) return <Loader />
-
+    
     const filteredCharacters = useMemo(() => {
         return nameFilter ? characters.filter(character => 
             character.name.toLowerCase().includes(nameFilter.toLowerCase())
-            ) : characters 
-        }, [characters, nameFilter])
-
+        ) : characters 
+    }, [characters, nameFilter])
+    
+    if (loading) return <Loader />
+    
   return (
     <div className="flex flex-col justify-center bg-lime-800 p-2">
         <div className='m-10'>
